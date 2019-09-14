@@ -1,16 +1,51 @@
-import React from 'react';
-import { View, Text, StyleSheet, Switch } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Switch, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
+import Colors from '../constans/Colors';
+
+const FilterSwitch = props => {
+  return (
+    <View style={styles.filterContainer}>
+      <Text>{props.label}</Text>
+      <Switch
+        value={props.state}
+        onValueChange={props.onChange}
+        trackColor={{ true: Colors.primaryColor }}
+        thumbColor={Platform.OS === 'android' ? Colors.primaryColor : ''}
+      />
+    </View>
+  );
+};
 
 const FiltersScreen = props => {
+  const [isGlutenFree, setIsGlutenFree] = useState(false);
+  const [isLactoseFree, setIsLactoseFree] = useState(false);
+  const [isVegan, setIsVegan] = useState(false);
+  const [isVegetarian, setIsVegetarian] = useState(false);
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Available Filters / Restrictions</Text>
-      <View style={styles.filterContainer}>
-        <Text>Gluten Free</Text>
-        <Switch />
-      </View>
+      <FilterSwitch
+        label='Gluten-free'
+        state={isGlutenFree}
+        onChange={newValue => setIsGlutenFree(newValue)}
+      />
+      <FilterSwitch
+        label='Lactose-free'
+        state={isLactoseFree}
+        onChange={newValue => setIsLactoseFree(newValue)}
+      />
+      <FilterSwitch
+        label='Vegan'
+        state={isVegan}
+        onChange={newValue => setIsVegan(newValue)}
+      />
+      <FilterSwitch
+        label='Vegetarian'
+        state={isVegetarian}
+        onChange={newValue => setIsVegetarian(newValue)}
+      />
     </View>
   );
 };
@@ -37,7 +72,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center'
   },
-  filterContainer: {},
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '80%',
+    marginVertical: 15
+  },
   title: {
     fontFamily: 'open-sans-bold',
     fontSize: 22,
